@@ -1,0 +1,213 @@
+/* ---------- Base ---------- */
+:root {
+  --ink: #3b2a1a;
+  --paper: #fff8e4;
+  --soil: #6b4a2f;
+  --leaf: #3f8a2f;
+  --glow: rgba(255, 200, 50, 0.55);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #eaf6d8; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 4px solid #1a5fb4; outline-offset: 2px; }
+
+/* ---------- Introduction ---------- */
+.intro {
+  min-height: 100dvh; display: grid; place-items: center; padding: 24px;
+  background: linear-gradient(#cfeaf7, #eaf6d8);
+}
+.intro-card {
+  max-width: 640px; padding: 32px 36px; text-align: center; font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.85); border-radius: 28px; animation: fade-in 0.8s both;
+}
+.intro-card h1 { margin-top: 0; }
+.big-button {
+  margin-top: 12px; padding: 16px 52px; font-size: 1.9rem; font-weight: 700; color: #fff;
+  background: var(--leaf); border: 0; border-radius: 999px; box-shadow: 0 6px 0 #2a6420;
+  animation: pulse 2.6s ease-in-out infinite;
+}
+.big-button:hover { background: #4aa036; }
+
+/* ---------- Garden layout ---------- */
+.garden-screen { display: flex; flex-direction: column; height: 100dvh; }
+.garden-header {
+  display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; padding: 8px 16px;
+  background: var(--paper); border-bottom: 3px solid #d9b977;
+}
+.garden-header h1 { margin: 0; font-size: 1.4rem; }
+.status { flex: 1 1 320px; }
+.status p { margin: 0; }
+.guidance { font-weight: 600; }
+.feedback { color: #2f6a22; }
+.link-button { background: none; border: 0; text-decoration: underline; padding: 8px; }
+
+.garden-scroll { flex: 1; overflow: auto; position: relative; }
+.garden-track { position: relative; min-width: max-content; min-height: 100%; display: flex; align-items: flex-end; background: linear-gradient(#cfeaf7, #eaf6d8 70%); }
+.garden-track::before {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 76px; background: var(--soil); z-index: 1;
+}
+.garden-background { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.plots { position: relative; z-index: 2; display: flex; align-items: flex-end; padding: 0 20px; }
+
+/* ---------- A planting space: layers stacked in one box ---------- */
+.plot { width: 230px; flex: none; display: flex; flex-direction: column; }
+.plot-hint {
+  display: flex; gap: 6px; align-items: center; min-height: 84px; margin: 0 6px 6px; padding: 6px 10px;
+  font-size: 0.95rem; background: rgba(255, 255, 255, 0.88); border-radius: 14px;
+}
+.plot-stage { position: relative; width: 100%; aspect-ratio: 4 / 5; }
+.layer { position: absolute; inset: 0; pointer-events: none; }
+.layer-plant { z-index: 2; }
+.layer-overlay { z-index: 3; }
+.layer-effects { z-index: 4; }
+.layer-controls { z-index: 5; }
+.layer img, .grow, .preview-stage > img { width: 100%; height: 100%; object-fit: contain; object-position: center bottom; display: block; }
+.grow { animation: grow 1.2s ease-out; transform-origin: 50% 100%; }
+
+.plot-hit { position: absolute; inset: 0; z-index: 1; width: 100%; background: transparent; border: 0; border-radius: 12px; }
+.plot-hit:hover { background: rgba(255, 255, 255, 0.18); }
+.plot-empty::after {
+  content: ''; position: absolute; left: 25%; right: 25%; bottom: 4%; height: 8%;
+  border: 3px dashed rgba(255, 255, 255, 0.85); border-radius: 50%;
+}
+.plot-soil { position: relative; height: 76px; overflow: hidden; border-top: 6px solid #4a3220; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.soil-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; }
+.plot-name, .plot-unlocked { position: relative; text-shadow: 0 1px 3px #000; }
+.plot-name { font-weight: 700; }
+.plot-unlocked { font-size: 0.85rem; color: #ffe9a0; }
+
+/* ---------- Challenges ---------- */
+.layer-controls > * { pointer-events: auto; }
+.challenge-item {
+  position: absolute; translate: -50% -50%; width: 52px; height: 52px; display: grid; place-items: center;
+  background: #fff; border: 3px solid #8a5a2b; border-radius: 50%; color: #5a3b1a; padding: 0;
+}
+.challenge-target { background: rgba(255, 230, 120, 0.7); border: 3px dashed #d08a00; animation: pulse 2s ease-in-out infinite; }
+.challenge-guide { position: absolute; translate: -50% -50%; color: #b07a00; transition: left 0.6s, top 0.6s; pointer-events: none; }
+.challenge-place {
+  position: absolute; left: 50%; bottom: 8%; translate: -50% 0; display: flex; gap: 6px; align-items: center;
+  padding: 10px 14px; background: #fff; border: 3px solid #8a5a2b; border-radius: 999px; font-weight: 600;
+  animation: pulse 2.4s ease-in-out infinite;
+}
+.challenge-placed { position: absolute; left: 50%; top: 55%; translate: -50% -50%; color: #5a3b1a; animation: pop 0.6s both; }
+.challenge-done { position: absolute; left: 50%; top: 45%; translate: -50% -50%; font-size: 3rem; color: #2f8a2f; animation: pop 0.6s both; }
+.challenge-sun { position: absolute; top: 4%; translate: -50% 0; color: #e6a800; transition: left 0.2s; pointer-events: none; }
+.challenge-sun.lit { filter: drop-shadow(0 0 10px #ffd84d); scale: 1.3; }
+.challenge-slider {
+  position: absolute; left: 6%; right: 6%; bottom: 4%; display: flex; flex-direction: column; gap: 2px;
+  padding: 6px 10px; font-size: 0.9rem; font-weight: 600; background: rgba(255, 255, 255, 0.9); border-radius: 12px;
+}
+.challenge-slider input { width: 100%; height: 28px; }
+.pop-in { animation: pop 0.5s both; }
+
+.harvest-item {
+  position: absolute; translate: -50% -50%; width: 26%; aspect-ratio: 1; padding: 0; background: none; border: 0;
+  animation: glow 2.2s ease-in-out infinite;
+}
+.harvest-item img { width: 100%; height: 100%; object-fit: contain; }
+.flying-item { position: fixed; z-index: 50; pointer-events: none; transition: transform 0.9s ease-in-out; }
+.flying-item img { width: 100%; height: 100%; object-fit: contain; }
+
+/* ---------- Action feedback ---------- */
+.fx { position: absolute; inset: 0; }
+.fx i { position: absolute; top: 35%; width: 14px; height: 14px; border-radius: 50%; background: #4aa3e8; animation: fall 1s ease-in both; }
+.fx i:nth-child(1) { left: 38%; } .fx i:nth-child(2) { left: 50%; animation-delay: 0.15s; } .fx i:nth-child(3) { left: 62%; animation-delay: 0.3s; }
+.fx-plant i { background: #8a5a2b; top: 82%; animation-name: rise; }
+.fx-compost i { background: #5a3b1a; }
+.fx-prune i, .fx-weed i { background: #6fbf5a; top: 60%; animation-name: rise; }
+.fx-done i { background: #ffd84d; top: 60%; animation-name: rise; }
+
+/* ---------- Bottom panel: toolbar + basket ---------- */
+.garden-panel {
+  display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; justify-content: space-between;
+  padding: 8px 16px; background: var(--paper); border-top: 3px solid #d9b977;
+}
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; }
+.tool {
+  min-width: 84px; min-height: 84px; padding: 6px 8px; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 2px; font-size: 0.85rem; background: #fff; border: 3px solid #8a5a2b; border-radius: 14px;
+}
+.tool-selected { background: #d6f0b8; box-shadow: 0 0 0 4px #4f9a3a; }
+.tool-locked { opacity: 0.5; }
+.seed-packet-art { height: 52px; width: auto; }
+.pulse { animation: pulse 2s ease-in-out infinite; }
+
+.basket { display: flex; gap: 12px; align-items: center; }
+.basket-picture { position: relative; width: 120px; height: 90px; }
+.basket-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.basket-items { position: absolute; left: 14%; right: 14%; top: 22%; bottom: 20%; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; margin: 0; padding: 0; list-style: none; }
+.basket-items li { width: 26px; height: 26px; animation: pop 0.5s both; }
+.basket-items img { width: 100%; height: 100%; object-fit: contain; }
+.basket-text p { margin: 0; font-size: 0.9rem; }
+.basket-dots { display: flex; gap: 4px; margin: 4px 0 !important; }
+.dot { width: 12px; height: 12px; border: 2px solid #8a5a2b; border-radius: 50%; }
+.dot-full { background: #8fcf4a; }
+.basket-full .basket-picture { animation: glow 2s ease-in-out infinite; }
+
+/* ---------- Letter ---------- */
+.envelope {
+  position: fixed; z-index: 20; left: 50%; top: 38%; translate: -50% -50%; width: 240px; padding: 12px;
+  display: flex; flex-direction: column; align-items: center; background: none; border: 0; font-weight: 700; font-size: 1.1rem;
+  animation: fade-in 1s 1.6s both, pulse 2.4s 2.6s ease-in-out infinite;
+}
+.envelope-art { width: 100%; height: auto; }
+.letter-backdrop { position: fixed; z-index: 60; inset: 0; display: flex; padding: 16px; overflow: auto; background: rgba(40, 30, 10, 0.5); }
+.letter {
+  position: relative; width: min(92vw, 560px); min-height: 70vh; margin: auto; color: var(--ink);
+  font-family: Georgia, 'Times New Roman', serif; transform-origin: 50% 0; animation: unfold 1s ease-out both;
+}
+.letter-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; }
+.letter-content { position: relative; padding: 48px 44px 36px; }
+.letter h2 { margin-top: 0; text-align: center; font-size: 2rem; }
+.letter h2:focus { outline: none; }
+.letter-intro, .letter-signoff { text-align: center; font-style: italic; }
+.letter ol { padding-left: 1.4em; } .letter li { margin: 0.6em 0; font-size: 1.15rem; }
+.letter-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 18px; }
+.letter-actions button { padding: 10px 18px; background: #fff; border: 3px solid #8a5a2b; border-radius: 999px; font-family: system-ui, sans-serif; font-weight: 600; }
+
+/* ---------- Small screens: keep the whole garden strip visible above the tools ---------- */
+@media (max-width: 700px) {
+  :root { font-size: 16px; }
+  .garden-header { padding: 4px 12px; gap: 0 12px; }
+  .garden-header h1 { font-size: 1.1rem; }
+  .link-button { padding: 2px 4px; }
+  .plot { width: 190px; }
+  .plot-hint { min-height: 66px; font-size: 0.85rem; }
+  .garden-panel { padding: 6px 10px; gap: 6px 12px; }
+  .toolbar { gap: 6px; }
+  .tool { min-width: 64px; min-height: 64px; font-size: 0.72rem; }
+  .tool svg { width: 24px; height: 24px; }
+  .seed-packet-art { height: 34px; }
+  .basket-picture { width: 70px; height: 52px; }
+  .basket-text p { font-size: 0.8rem; }
+  .basket-items li { width: 18px; height: 18px; }
+}
+
+/* ---------- Artwork preview page ---------- */
+.preview { padding: 16px 24px; max-width: 1400px; margin: auto; }
+.preview-row { display: flex; flex-wrap: wrap; gap: 12px; }
+.preview figure { margin: 0; text-align: center; font-size: 0.85rem; }
+.preview-stage, .preview-ui {
+  width: 150px; background: repeating-conic-gradient(#e4e4e4 0 25%, #fff 0 50%) 0 0 / 16px 16px; border: 1px solid #bbb;
+}
+.preview-ui { width: 200px; height: 140px; }
+.preview-ui img { width: 100%; height: 100%; object-fit: contain; }
+
+/* ---------- Animations ---------- */
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes grow { from { transform: scale(0.8); opacity: 0.4; } to { transform: scale(1); opacity: 1; } }
+@keyframes pop { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes pulse { 0%, 100% { scale: 1; box-shadow: 0 0 0 0 transparent; } 50% { scale: 1.06; box-shadow: 0 0 0 10px var(--glow); } }
+@keyframes glow { 0%, 100% { filter: drop-shadow(0 0 0 transparent); } 50% { filter: drop-shadow(0 0 10px #ffd84d); } }
+@keyframes fall { from { opacity: 1; transform: translateY(-20px); } to { opacity: 0; transform: translateY(110px); } }
+@keyframes rise { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-90px); } }
+@keyframes unfold { from { transform: scaleY(0.05) rotateX(70deg); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* Gentle by default; no motion at all if the visitor asks for less. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
