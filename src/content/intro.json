@@ -1,11 +1,8 @@
 {
-  "title": "Welcome to our garden.",
+  "title": "Welcome",
   "paragraphs": [
-    "Eight little plants are waiting to grow, but they need your help.",
-    "Each has something special to offer, and each will face a challenge along the way.",
-    "Help them take root, nurture them through their difficulties, and gather what they have grown.",
-    "In return, we’ll share something we’ve made together: our manifesto.",
-    "Are you ready to begin?"
+    "In a field beneath a patient sun,\nStand flowers growing one by one.\nAlone they grow, but together they thrive,\nNow it's your turn to help keep them alive.",
+    "Give them your time, let kindness take root.\nSoon they will reward you with flower and fruit.\nAs your garden grows, its message revealed.\nOur manifesto will bloom across this field."
   ],
-  "buttonLabel": "Let’s Grow"
+  "buttonLabel": "LET'S GROW!"
 }

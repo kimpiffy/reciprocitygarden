@@ -14,14 +14,14 @@ export function ArtPreview() {
         Each box is the real plant artwork area. Replace files in <code>public/assets</code> and refresh this page.
         Missing files simply show nothing.
       </p>
-      {PLANTS.map((plant) => (
+      {PLANTS.map((plant, index) => (
         <section key={plant.id}>
           <h2>{plant.name} <small>({plant.assetFolder}/)</small></h2>
           <div className="preview-row">
             {plant.stages.map((name, stage) => (
               <figure key={name}>
                 <div className="plot-stage preview-stage">
-                  <Plant config={plant} stage={stage} />
+                  <Plant config={plant} seedIndex={index} stage={stage} />
                 </div>
                 <figcaption>{name}</figcaption>
               </figure>

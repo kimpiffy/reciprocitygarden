@@ -1,7 +1,7 @@
 import { useReducer, useRef, useState, type Dispatch } from 'react'
 import { PLANTS } from '../config/plants'
 import { CARE_TOOLS } from '../config/tools'
-import { currentStep, phaseOf, type Action } from '../logic/garden'
+import { currentStep, isReady, phaseOf, type Action } from '../logic/garden'
 import type { CareAction, GardenState } from '../types'
 import { Art } from './Art'
 import { FlyingItem } from './FlyingItem'
@@ -42,6 +42,7 @@ export function Garden({ state, dispatch }: Props) {
   const plantedCount = list.filter((g) => g.planted).length
   const wateredCount = list.filter((g) => g.watered).length
   const allPlanted = plantedCount === TOTAL
+  const harvestMode = PLANTS.every((p) => isReady(p, state.plants[p.id])) && phase !== 'complete'
 
   const available = { seed: !allPlanted, water: allPlanted, compost: allPlanted, prune: allPlanted, weed: allPlanted }
   const pulse: ToolId | null =
@@ -57,8 +58,10 @@ export function Garden({ state, dispatch }: Props) {
         ? `Tap each seed to water it (${wateredCount} of ${TOTAL} watered).`
         : 'All the seeds are planted! Choose the watering can, then tap each seed.',
     growing:
-      'Each plant shows what it needs above it. Choose the matching tool and tap the plant, or follow the instructions on the plant.',
-    harvesting: 'Something is ready! Tap each ripe item to put it in your basket. Other plants may still need care.',
+      'Each plant shows what it needs below it. Choose the matching tool and tap the plant, or follow the instructions below it.',
+    harvesting: harvestMode
+      ? 'Everything has grown! Drag each ripe item into the basket.'
+      : 'Something is ready! Keep caring for the other plants. When they have all grown, we will gather the harvest together.',
     complete: 'Your basket is full. Open the letter to read what we made together.',
   }[phase]
 
@@ -85,7 +88,7 @@ export function Garden({ state, dispatch }: Props) {
       dispatch({ type: 'plant', id })
       effect(id, 'plant')
       if (plantedCount + 1 === TOTAL) {
-        setTool('water')
+        setTool(null)
         setFeedback('That’s the last seed! The watering can is ready.')
       } else setFeedback(`Seed planted in the ${plant.name.toLowerCase()} space.`)
       return
@@ -108,10 +111,22 @@ export function Garden({ state, dispatch }: Props) {
       effect(id, tool as CareAction)
       setFeedback(CARE_TOOLS[tool as CareAction].doneMessage)
     } else if (step?.kind === 'challenge') {
-      setFeedback(`The ${plant.name.toLowerCase()} has a challenge. Follow the instructions above it.`)
+      setFeedback(`The ${plant.name.toLowerCase()} has a challenge. Follow the instructions below it.`)
     } else if (step?.kind === 'care') {
-      setFeedback(`The ${plant.name.toLowerCase()} needs something else right now. Look for the hint above it.`)
+      setFeedback(`The ${plant.name.toLowerCase()} needs something else right now. Look for the hint below it.`)
     } else setFeedback(`The ${plant.name.toLowerCase()} has everything it needs.`)
+  }
+
+  const dropHarvest = (id: string, x: number, y: number) => {
+    const r = basketRef.current?.getBoundingClientRect()
+    if (!r || x < r.left || x > r.right || y < r.top || y > r.bottom) {
+      setFeedback('Drop it onto the basket.')
+      return false
+    }
+    const plant = PLANTS.find((p) => p.id === id)!
+    dispatch({ type: 'harvest', id })
+    setFeedback(`The ${plant.harvest.name.toLowerCase()} goes into the basket.`)
+    return true
   }
 
   const challengeComplete = (id: string) => {
@@ -136,7 +151,7 @@ export function Garden({ state, dispatch }: Props) {
     <>
       <div className="garden-screen" inert={letterOpen}>
         <header className="garden-header">
-          <h1>Our Garden</h1>
+          <h1>Garden of Reciprocity</h1>
           <div className="status" role="status" aria-live="polite">
             {feedback && <p className="feedback">{feedback}</p>}
             <p className="guidance">{guidance}</p>
@@ -164,10 +179,12 @@ export function Garden({ state, dispatch }: Props) {
                   progress={state.plants[config.id]}
                   seedSelected={tool === 'seed'}
                   waterAvailable={allPlanted}
+                  harvestMode={harvestMode}
                   effect={effects[config.id]}
                   flying={flights.some((f) => f.id === config.id)}
                   onActivate={() => activate(config.id)}
                   onChallengeComplete={() => challengeComplete(config.id)}
+                  onHarvestDrop={(x, y) => dropHarvest(config.id, x, y)}
                   onHarvest={(from) => {
                     setFlights((f) => [...f, { id: config.id, from }])
                     setFeedback(`The ${config.harvest.name.toLowerCase()} goes into the basket.`)
@@ -206,7 +223,6 @@ export function Garden({ state, dispatch }: Props) {
         onOpen={() => setLetterOpen(true)}
         onClose={() => setLetterOpen(false)}
         onRestart={restart}
-        lines={PLANTS.map((p) => p.manifestoLine)}
       />
     </>
   )

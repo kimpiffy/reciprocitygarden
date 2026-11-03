@@ -9,11 +9,10 @@ interface Props {
   onOpen: () => void
   onClose: () => void
   onRestart: () => void
-  lines: string[]
 }
 
 /** The envelope that appears once the basket is full, and the unfolded manifesto. */
-export function ManifestoLetter({ available, open, onOpen, onClose, onRestart, lines }: Props) {
+export function ManifestoLetter({ available, open, onOpen, onClose, onRestart }: Props) {
   const envelope = useRef<HTMLButtonElement>(null)
   const heading = useRef<HTMLHeadingElement>(null)
   const wasOpen = useRef(false)
@@ -51,13 +50,11 @@ export function ManifestoLetter({ available, open, onOpen, onClose, onRestart, l
             <Art base="assets/ui/letter-open" className="letter-art" />
             <div className="letter-content">
               <h2 id="letter-title" tabIndex={-1} ref={heading}>{manifesto.title}</h2>
-              <p className="letter-intro">{manifesto.intro}</p>
-              <ol>
-                {lines.map((line) => (
-                  <li key={line}>{line}</li>
+              <div className="letter-body">
+                {manifesto.paragraphs.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
                 ))}
-              </ol>
-              <p className="letter-signoff">{manifesto.signoff}</p>
+              </div>
               <div className="letter-actions">
                 <button type="button" onClick={onClose}>Back to the garden</button>
                 <button type="button" onClick={onRestart}>Grow the garden again</button>

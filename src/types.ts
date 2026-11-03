@@ -51,6 +51,7 @@ export type ChallengeConfig =
 export interface PlantConfig {
   id: string
   name: string
+  unlockedValue: string
   description: string
   /** Folder under /public (no leading or trailing slash). */
   assetFolder: string

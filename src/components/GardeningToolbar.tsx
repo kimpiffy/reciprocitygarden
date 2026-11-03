@@ -1,6 +1,10 @@
+import seedPacket from '../../seedpacket.png'
+import openSeedPacket from '../../seedpacktopen.png'
+import wateringCan from '../../wateringcan.png'
+import wateringCanPour from '../../wateringcanpour.png'
+import compost from '../../compost.png'
 import { CARE_TOOLS } from '../config/tools'
 import type { CareAction } from '../types'
-import { Art } from './Art'
 import { Icon } from './Icon'
 
 export type ToolId = 'seed' | CareAction
@@ -23,26 +27,45 @@ export function GardeningToolbar({ tool, careTools, available, pulse, onSelect }
       <button
         type="button"
         className={`${cls('seed')} seed-packet`}
+        aria-label="Seed packet"
         aria-pressed={tool === 'seed'}
         aria-disabled={!available.seed}
         onClick={() => onSelect('seed')}
       >
-        <Art base="assets/ui/seed-packet" className="seed-packet-art" />
-        <span>Seed packet</span>
+        <img
+          src={tool === 'seed' ? openSeedPacket : seedPacket}
+          className="seed-packet-art"
+          alt=""
+          draggable={false}
+        />
       </button>
-      {careTools.map((id) => (
-        <button
-          key={id}
-          type="button"
-          className={cls(id)}
-          aria-pressed={tool === id}
-          aria-disabled={!available[id]}
-          onClick={() => onSelect(id)}
-        >
-          <Icon name={CARE_TOOLS[id].icon} size={34} />
-          <span>{CARE_TOOLS[id].label}</span>
-        </button>
-      ))}
+      <div className="tool-grid">
+        {careTools.map((id) => (
+          <button
+            key={id}
+            type="button"
+            className={cls(id)}
+            aria-label={id === 'water' || id === 'compost' ? CARE_TOOLS[id].label : undefined}
+            aria-pressed={tool === id}
+            aria-disabled={!available[id]}
+            onClick={() => onSelect(id)}
+          >
+            {id === 'water' || id === 'compost' ? (
+              <img
+                src={id === 'water' ? (tool === 'water' ? wateringCanPour : wateringCan) : compost}
+                className={id === 'water' ? 'watering-can-art' : 'compost-art'}
+                alt=""
+                draggable={false}
+              />
+            ) : (
+              <>
+                <Icon name={CARE_TOOLS[id].icon} size={34} />
+                <span>{CARE_TOOLS[id].label}</span>
+              </>
+            )}
+          </button>
+        ))}
+      </div>
     </div>
   )
 }

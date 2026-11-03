@@ -16,6 +16,27 @@ describe('configuration', () => {
     PLANTS.forEach((p, i) => expect(p.manifestoLine).toBe(manifesto.lines[i]))
   })
 
+  it('has eight manifesto paragraphs of exactly 80 words each', () => {
+    expect(manifesto.title).toBe('Manifesto')
+    expect(manifesto.paragraphs).toHaveLength(8)
+    manifesto.paragraphs.forEach((paragraph) => {
+      expect(paragraph.trim().split(/\s+/)).toHaveLength(80)
+    })
+  })
+
+  it('assigns the requested unlocked value to each plant', () => {
+    expect(PLANTS.map(({ name, unlockedValue }) => [name, unlockedValue])).toEqual([
+      ['Cherry Blossom', 'Opportunity'],
+      ['Bamboo', 'Flexibility'],
+      ['Peony', 'Mutual Care'],
+      ['Hawthorn', 'Boundaries'],
+      ['Dahlia', 'Individuality'],
+      ['Mangrove', 'Resilience'],
+      ['Sunflower', 'Solidarity'],
+      ['Wisteria', 'Trust'],
+    ])
+  })
+
   it('only uses known care tools and has six growth stages', () => {
     for (const p of PLANTS) {
       expect(p.stages).toHaveLength(6)
