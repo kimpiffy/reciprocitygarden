@@ -5,6 +5,7 @@ export type CareAction = 'water' | 'compost' | 'prune' | 'weed'
 export type IconName =
   | 'seed' | 'water' | 'compost' | 'prune' | 'weed'
   | 'cane' | 'shelter' | 'bug' | 'puddle' | 'bee' | 'sun'
+  | 'dead-cane' | 'damaged-branch' | 'fallen-leaf' | 'litter' | 'support' | 'trellis'
 
 export interface ChallengeBase {
   /** Shown to the visitor when this challenge becomes active. */
@@ -16,6 +17,7 @@ export interface TapClearChallenge extends ChallengeBase {
   type: 'tap-clear'
   items: number
   itemLabel: string
+  itemAction?: 'clear' | 'collect'
   icon: IconName
 }
 

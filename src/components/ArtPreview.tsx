@@ -21,7 +21,13 @@ export function ArtPreview() {
             {plant.stages.map((name, stage) => (
               <figure key={name}>
                 <div className="plot-stage preview-stage">
-                  <Plant config={plant} seedIndex={index} stage={stage} />
+                  <Plant
+                    config={plant}
+                    seedIndex={index}
+                    stage={stage}
+                    berryReady={stage === 5}
+                    trellisPlaced={plant.id === 'lavender' && stage === 5}
+                  />
                 </div>
                 <figcaption>{name}</figcaption>
               </figure>

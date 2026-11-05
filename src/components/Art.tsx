@@ -3,9 +3,6 @@ import { useState } from 'react'
 /** Formats an illustrator may supply, tried in this order (first one found wins). */
 const EXTENSIONS = ['png', 'webp', 'svg']
 
-/** Remembers which extension worked for each file so we only probe once. */
-const resolved = new Map<string, number>()
-
 interface ArtProps {
   /** Path under /public without extension, e.g. "assets/plants/rose/young". */
   base: string
@@ -14,7 +11,7 @@ interface ArtProps {
 }
 
 function ArtInner({ base, className, alt = '' }: ArtProps) {
-  const [index, setIndex] = useState(() => resolved.get(base) ?? 0)
+  const [index, setIndex] = useState(0)
   if (index >= EXTENSIONS.length) return null
   const src = `${import.meta.env.BASE_URL}${base}.${EXTENSIONS[index]}`
   return (
@@ -23,11 +20,7 @@ function ArtInner({ base, className, alt = '' }: ArtProps) {
       src={src}
       alt={alt}
       draggable={false}
-      onLoad={() => resolved.set(base, index)}
-      onError={() => {
-        resolved.set(base, index + 1)
-        setIndex(index + 1)
-      }}
+      onError={() => setIndex(index + 1)}
     />
   )
 }

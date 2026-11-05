@@ -62,10 +62,13 @@ Defined in `types.ts`, rendered by `components/PlantChallenge.tsx`.
 
 | `type` | Mechanic | Parameters | Used by |
 | --- | --- | --- | --- |
-| `tap-clear` | tap N items to clear them | `items`, `itemLabel`, `icon` | Rose, Strawberry, Lavender |
-| `place` | tap one button to place something | `buttonLabel`, `icon` | Hawthorn, Pea, Pumpkin |
+| `tap-clear` | tap N items to clear them | `items`, `itemLabel`, `icon` | Rose, Bamboo, Hawthorn, Mangrove |
+| `place` | tap one button to place something | `buttonLabel`, `icon` | Peony, Wisteria |
 | `follow-path` | tap glowing spots to guide a bee | `steps`, `guideLabel` | Wildflower |
 | `slider` | move a slider (keyboard friendly) until it lines up | `sliderLabel`, `target`, `tolerance` | Sunflower |
+
+Wisteria's trellis is shown behind its plant artwork after placement. Tap-clear challenge icons are specific to their
+target: dead bamboo canes, damaged Hawthorn branches, and litter caught in Mangrove roots.
 
 To change a plant's challenge, edit only its `challenge` object. To add a new mechanic:
 

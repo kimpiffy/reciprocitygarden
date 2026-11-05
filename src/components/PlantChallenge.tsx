@@ -56,7 +56,7 @@ function TapClear({ challenge, onComplete }: { challenge: Extract<ChallengeConfi
             type="button"
             className="challenge-item pop-in"
             style={spot(i, challenge.items)}
-            aria-label={`${challenge.itemLabel} ${i + 1} of ${challenge.items}. Tap to clear it.`}
+            aria-label={`${challenge.itemLabel} ${i + 1} of ${challenge.items}. Tap to ${challenge.itemAction ?? 'clear'} it.`}
             onClick={() => setCleared((c) => [...c, i])}
           >
             <Icon name={challenge.icon} size={30} />

@@ -24,6 +24,11 @@ npm run build      # makes the finished site in dist/
 
 Progress is saved in the browser. Use **Start again** in the garden (or clear site data) to reset it.
 
+## Deploy to GitHub Pages
+
+The workflow in `.github/workflows/deploy-pages.yml` builds and deploys the site when changes are pushed to `main`.
+In the repository settings, open **Pages** and set **Build and deployment → Source** to **GitHub Actions**.
+
 ## Who edits what?
 
 | You are… | You edit… | Read… |

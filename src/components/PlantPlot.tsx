@@ -87,7 +87,13 @@ export function PlantPlot(props: Props) {
           aria-label={`${config.name}, planting space ${index + 1} of ${total}. ${hint}`}
           onClick={props.onActivate}
         />
-        <Plant config={config} seedIndex={index} stage={stage} />
+        <Plant
+          config={config}
+          seedIndex={index}
+          stage={stage}
+          berryReady={ready && !progress.harvested && !drag}
+          trellisPlaced={ready}
+        />
 
         <div className="layer layer-effects" aria-hidden={effect ? undefined : true}>
           {effect && (
@@ -109,7 +115,7 @@ export function PlantPlot(props: Props) {
           {harvestable && (
             <button
               type="button"
-              className={`harvest-item${props.harvestMode ? ' harvest-draggable' : ''}${drag ? ' harvest-held' : ''}`}
+              className={`harvest-item${config.id === 'hawthorn' ? ' harvest-item-hawthorn' : ''}${props.harvestMode ? ' harvest-draggable' : ''}${drag ? ' harvest-held' : ''}`}
               style={{
                 left: `${config.harvest.x}%`,
                 top: `${config.harvest.y}%`,

@@ -95,11 +95,20 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 .plot-stage { position: relative; width: 100%; aspect-ratio: 4 / 5; }
 .layer { position: absolute; inset: 0; pointer-events: none; }
 .layer-plant { z-index: 2; }
+.layer-trellis { z-index: 1.5; display: flex; justify-content: center; align-items: flex-end; padding-bottom: 5%; }
+.layer-trellis svg { width: 58%; height: 88%; color: #76552f; opacity: 0.8; }
 .layer-overlay { z-index: 3; }
 .layer-effects { z-index: 4; }
 .layer-controls { z-index: 5; }
 .layer img, .grow, .preview-stage > img { width: 100%; height: 100%; object-fit: contain; object-position: center bottom; display: block; }
 .grow { animation: grow 1.2s ease-out; transform-origin: 50% 100%; }
+.layer-plant[data-plant="hawthorn"] .grow > img:not(.planted-seed),
+.layer-overlay .hawthorn-berry-overlay {
+  transform: scale(2); transform-origin: center bottom;
+}
+.layer-overlay .hawthorn-berry-overlay {
+  animation: hawthorn-berry-glow 2.2s ease-in-out infinite;
+}
 .grow .planted-seed { position: absolute; left: 50%; bottom: 1%; width: 20%; height: 22%; object-fit: contain; object-position: center; mix-blend-mode: multiply; transform: translateX(-50%); }
 
 .plot-hit { position: absolute; inset: 0; z-index: 1; width: 100%; background: transparent; border: 0; border-radius: 12px; }
@@ -144,6 +153,8 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
   animation: glow 2.2s ease-in-out infinite;
 }
 .harvest-item img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+.harvest-item-hawthorn:not(.harvest-held) img { opacity: 0; }
+.harvest-item-hawthorn:focus-visible img { opacity: 1; }
 .harvest-item:disabled { animation: none; cursor: default; }
 .harvest-draggable { cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
 .harvest-held { visibility: hidden; }
@@ -199,7 +210,7 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 .basket-picture { position: relative; width: 100%; aspect-ratio: 1; }
 .basket-art { position: absolute; top: 0; left: 5%; width: 90%; height: 100%; object-fit: contain; }
 .basket-items { position: absolute; left: 14%; right: 14%; top: 22%; bottom: 20%; margin: 0; padding: 0; list-style: none; }
-.basket-items li { position: absolute; width: 28px; height: 28px; animation: pop 0.5s both; }
+.basket-items li { position: absolute; width: 56px; height: 56px; animation: pop 0.5s both; }
 .basket-items img { width: 100%; height: 100%; object-fit: contain; }
 .basket-text { width: 100%; }
 .basket-text p { margin: 0; font-size: 0.9rem; }
@@ -243,7 +254,7 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
   .tool { font-size: 0.72rem; }
   .tool svg { width: 24px; height: 24px; }
   .basket-text p { font-size: 0.8rem; }
-  .basket-items li { width: 18px; height: 18px; }
+  .basket-items li { width: 36px; height: 36px; }
 }
 
 @media (min-width: 701px) and (max-width: 900px) {
@@ -266,6 +277,10 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 @keyframes pop { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 @keyframes pulse { 0%, 100% { scale: 1; box-shadow: 0 0 0 0 transparent; } 50% { scale: 1.06; box-shadow: 0 0 0 10px var(--glow); } }
 @keyframes pulse-art { 0%, 100% { scale: 1; } 50% { scale: 1.06; } }
+@keyframes hawthorn-berry-glow {
+  0%, 100% { scale: 1; filter: hue-rotate(0deg) drop-shadow(0 0 0 transparent); }
+  50% { scale: 1.01; filter: hue-rotate(8deg) drop-shadow(0 0 8px rgba(255, 190, 75, 0.7)); }
+}
 @keyframes envelope-pulse { 0%, 100% { scale: 1; } 50% { scale: 1.06; } }
 @keyframes glow { 0%, 100% { filter: drop-shadow(0 0 0 transparent); } 50% { filter: drop-shadow(0 0 10px #ffd84d); } }
 @keyframes fall { from { opacity: 1; transform: translateY(-20px); } to { opacity: 0; transform: translateY(110px); } }

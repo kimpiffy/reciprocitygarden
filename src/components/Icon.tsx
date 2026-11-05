@@ -39,6 +39,24 @@ export function Icon({ name, size = 28 }: { name: IconName; size?: number }) {
     case 'sun':
       body = <><circle cx="12" cy="12" r="4" /><path d="M12 2 v3 M12 19 v3 M2 12 h3 M19 12 h3 M5 5 l2 2 M17 17 l2 2 M19 5 l-2 2 M7 17 l-2 2" /></>
       break
+    case 'dead-cane':
+      body = <><path d="M12 21 V4 M8 8 h8 M8 13 h8 M10 3 l2 2 2 -2" /><path d="M9 18 l2 -2 2 2" /></>
+      break
+    case 'damaged-branch':
+      body = <><path d="M12 21 V12 l-5 -5 M12 15 l5 -5 M7 7 5 4 M17 10 l3 -3" /><path d="M3 5 l3 3 M4 3 l3 3" /></>
+      break
+    case 'fallen-leaf':
+      body = <><path d="M5 19 C5 9 11 4 20 4 C20 13 15 19 5 19 Z" /><path d="M5 19 C9 14 13 10 18 7" /></>
+      break
+    case 'litter':
+      body = <><path d="M8 5 h8 l-1 16 H9z M7 5 h10 M10 2 h4 M11 9 v8 M14 9 v8" /></>
+      break
+    case 'support':
+      body = <><path d="M6 22 V5 M18 22 V5 M6 13 h12 M6 19 h12 M12 4 v7" /><path d="M12 3 q-4 0 -4 -3 M12 3 q4 0 4 -3" /></>
+      break
+    case 'trellis':
+      body = <><path d="M5 22 V3 M19 22 V3 M5 8 h14 M5 14 h14 M5 20 h14 M5 8 l14 12 M19 8 5 20" /></>
+      break
   }
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" focusable="false" {...common}>

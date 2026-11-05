@@ -34,6 +34,7 @@ Use **exactly** these names (lower-case, with hyphens). Use `.png`, `.webp` or `
 | `harvest-ready` | Stage 6: ready to harvest (after its challenge is done) | yes |
 | `harvest-item` | The flower / fruit / vegetable the visitor clicks, which then flies into the basket | yes |
 | `decorative-overlay` | Optional transparent layer drawn **over every stage** | optional |
+| `berry-overlay` | Hawthorn-only full-canvas berry layer, shown pulsing when that tree is ready to harvest | optional |
 
 Example: `public/assets/plants/rose/young.png`.
 
@@ -68,6 +69,10 @@ Use the overlay for details you want to sit over the top of the shared plant sha
 frame of leaves, painted texture, and so on. Because it covers the same canvas, draw it on an 800 × 1000 transparent
 canvas and place elements where you want them on the plant.
 
+Hawthorn's optional `berry-overlay.png` is a separate full-canvas signal shown only while its tree is ready and not yet
+harvested. Match the Hawthorn stage artwork's canvas and framing so the berries align. Its `harvest-item.png` is the
+separate cropped image used for dragging into the basket.
+
 Other replaceable artwork lives in `public/assets/ui/`: `seed-packet`, `basket`, `letter-closed` (the envelope),
 `letter-open` (the paper behind the manifesto; it is stretched to fit), `soil` and `background`.
 
@@ -85,7 +90,8 @@ Other replaceable artwork lives in `public/assets/ui/`: `seed-packet`, `basket`,
 1. Draw six hawthorn stages on an 800 × 1000 transparent canvas, with the trunk base at the bottom centre each time.
 2. Export them as PNG and name them:
    `seed.png`, `sprout.png`, `young.png`, `growing.png`, `mature.png`, `harvest-ready.png`.
-3. Draw one hawthorn berry on a 400 × 400 transparent canvas and export `harvest-item.png`.
+3. Draw the full-canvas berry signal as `berry-overlay.png`. Separately, export a cropped berry image as
+   `harvest-item.png` for dragging into the basket.
 4. *(Optional)* Draw some birds and blossom on an 800 × 1000 transparent canvas, export `decorative-overlay.png`.
 5. Copy all the files into `public/assets/plants/hawthorn/`. You'll now have e.g. both `seed.svg` (placeholder) and
    `seed.png` (yours); the PNG wins.

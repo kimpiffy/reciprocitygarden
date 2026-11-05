@@ -32,7 +32,7 @@ describe('configuration', () => {
       ['Hawthorn', 'Boundaries'],
       ['Dahlia', 'Individuality'],
       ['Mangrove', 'Resilience'],
-      ['Sunflower', 'Solidarity'],
+      ['Sunflower', 'Optimism'],
       ['Wisteria', 'Trust'],
     ])
   })
@@ -42,6 +42,24 @@ describe('configuration', () => {
       expect(p.stages).toHaveLength(6)
       p.care.forEach((c) => expect(CARE_TOOLS[c]).toBeDefined())
     }
+  })
+
+  it('assigns the plant-specific gardening challenges', () => {
+    const challenge = (id: string) => PLANTS.find((p) => p.id === id)!.challenge
+    expect(challenge('rose')).toMatchObject({ type: 'tap-clear', itemLabel: 'Weed', icon: 'weed' })
+    expect(challenge('pea')).toMatchObject({ type: 'tap-clear', itemLabel: 'Dead bamboo cane', icon: 'dead-cane' })
+    expect(challenge('strawberry')).toMatchObject({ type: 'place', buttonLabel: 'Add plant support', icon: 'support' })
+    expect(challenge('hawthorn')).toMatchObject({
+      type: 'tap-clear',
+      items: 3,
+      itemLabel: 'Fallen leaf',
+      itemAction: 'collect',
+      icon: 'fallen-leaf',
+    })
+    expect(challenge('wildflower')).toMatchObject({ type: 'follow-path' })
+    expect(challenge('pumpkin')).toMatchObject({ type: 'tap-clear', itemLabel: 'Piece of rubbish', icon: 'litter' })
+    expect(challenge('sunflower')).toMatchObject({ type: 'slider' })
+    expect(challenge('lavender')).toMatchObject({ type: 'place', buttonLabel: 'Add a trellis', icon: 'trellis' })
   })
 
   it('ships a placeholder file for every stage and harvest item', () => {
@@ -86,6 +104,22 @@ describe('growth journey', () => {
     expect(gardenReducer(watered, { type: 'harvest', id: p.id })).toBe(watered)
     expect(gardenReducer(initialState(), { type: 'water', id: p.id })).toEqual(initialState())
     expect(currentStep(p, watered.plants[p.id])).toEqual({ kind: 'care', action: p.care[0] })
+  })
+
+  it('requires pruning before collecting the hawthorn leaves', () => {
+    const hawthorn = PLANTS.find((p) => p.id === 'hawthorn')!
+    const watered = run([
+      { type: 'plant', id: hawthorn.id },
+      { type: 'water', id: hawthorn.id },
+    ])
+    expect(currentStep(hawthorn, watered.plants[hawthorn.id])).toEqual({ kind: 'care', action: 'prune' })
+
+    const pruned = gardenReducer(watered, {
+      type: 'completeStep',
+      id: hawthorn.id,
+      step: { kind: 'care', action: 'prune' },
+    })
+    expect(currentStep(hawthorn, pruned.plants[hawthorn.id])).toEqual({ kind: 'challenge' })
   })
 
   it('resets to a fresh garden', () => {
