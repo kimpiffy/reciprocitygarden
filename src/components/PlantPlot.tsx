@@ -16,6 +16,21 @@ export interface PlotEffect {
   n: number
 }
 
+function EffectImage({ kind }: { kind: 'plant' | 'water' }) {
+  const [failed, setFailed] = useState(false)
+  if (failed) return <><i /><i /><i /></>
+
+  return (
+    <img
+      src={kind === 'plant' ? seeds : water}
+      alt=""
+      style={{ visibility: 'hidden' }}
+      onLoad={(e) => { e.currentTarget.style.visibility = 'visible' }}
+      onError={() => setFailed(true)}
+    />
+  )
+}
+
 interface Props {
   config: PlantConfig
   index: number
@@ -98,11 +113,9 @@ export function PlantPlot(props: Props) {
         <div className="layer layer-effects" aria-hidden={effect ? undefined : true}>
           {effect && (
             <span key={effect.n} className={`fx fx-${effect.kind}`} aria-hidden="true">
-              {effect.kind === 'plant'
-                ? <img src={seeds} alt="" />
-                : effect.kind === 'water'
-                  ? <img src={water} alt="" />
-                  : <><i /><i /><i /></>}
+              {effect.kind === 'plant' || effect.kind === 'water'
+                ? <EffectImage key={effect.kind} kind={effect.kind} />
+                : <><i /><i /><i /></>}
             </span>
           )}
         </div>

@@ -35,7 +35,17 @@ export function Plant({ config, seedIndex, stage, berryReady, trellisPlaced }: P
         {/* key on stage so the grow animation replays on every change */}
         <div className="grow" key={stage}>
           {stage === 0 ? (
-            <img className="planted-seed" src={SEED_IMAGES[seedIndex % SEED_IMAGES.length]} alt="" />
+            <img
+              className="planted-seed"
+              src={SEED_IMAGES[seedIndex % SEED_IMAGES.length]}
+              alt=""
+              style={{ visibility: 'hidden' }}
+              onLoad={(e) => { e.currentTarget.style.visibility = 'visible' }}
+              onError={(e) => {
+                console.error('Failed to load planted seed image:', e.currentTarget.src)
+                e.currentTarget.style.visibility = 'hidden'
+              }}
+            />
           ) : (
             <Art base={folder + config.stages[stage]} />
           )}

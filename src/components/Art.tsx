@@ -12,6 +12,7 @@ interface ArtProps {
 
 function ArtInner({ base, className, alt = '' }: ArtProps) {
   const [index, setIndex] = useState(0)
+  const [loaded, setLoaded] = useState(false)
   if (index >= EXTENSIONS.length) return null
   const src = `${import.meta.env.BASE_URL}${base}.${EXTENSIONS[index]}`
   return (
@@ -20,6 +21,8 @@ function ArtInner({ base, className, alt = '' }: ArtProps) {
       src={src}
       alt={alt}
       draggable={false}
+      style={{ visibility: loaded ? 'visible' : 'hidden' }}
+      onLoad={() => setLoaded(true)}
       onError={() => setIndex(index + 1)}
     />
   )

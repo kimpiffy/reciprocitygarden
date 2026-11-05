@@ -33,10 +33,17 @@ export function GardeningToolbar({ tool, careTools, available, pulse, onSelect }
         onClick={() => onSelect('seed')}
       >
         <img
+          key={tool === 'seed' ? openSeedPacket : seedPacket}
           src={tool === 'seed' ? openSeedPacket : seedPacket}
           className="seed-packet-art"
           alt=""
           draggable={false}
+          style={{ visibility: 'hidden' }}
+          onLoad={(e) => { e.currentTarget.style.visibility = 'visible' }}
+          onError={(e) => {
+            console.error('Failed to load gardening tool image:', e.currentTarget.src)
+            e.currentTarget.style.visibility = 'hidden'
+          }}
         />
       </button>
       <div className="tool-grid">
@@ -52,10 +59,17 @@ export function GardeningToolbar({ tool, careTools, available, pulse, onSelect }
           >
             {id === 'water' || id === 'compost' ? (
               <img
+                key={id === 'water' ? (tool === 'water' ? wateringCanPour : wateringCan) : compost}
                 src={id === 'water' ? (tool === 'water' ? wateringCanPour : wateringCan) : compost}
                 className={id === 'water' ? 'watering-can-art' : 'compost-art'}
                 alt=""
                 draggable={false}
+                style={{ visibility: 'hidden' }}
+                onLoad={(e) => { e.currentTarget.style.visibility = 'visible' }}
+                onError={(e) => {
+                  console.error('Failed to load gardening tool image:', e.currentTarget.src)
+                  e.currentTarget.style.visibility = 'hidden'
+                }}
               />
             ) : (
               <>
